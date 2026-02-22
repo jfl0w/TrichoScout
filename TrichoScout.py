@@ -11,7 +11,7 @@ Usage:
     python trichoscout.py --watch          # run every N minutes continuously
 
 Cron example (every 5 minutes):
-    */5 * * * * /usr/bin/python3 /path/to/trichoscout.py >> /path/to/cactus.log 2>&1
+    */5 * * * * /usr/bin/python3 /path/to/trichoscout.py >> /path/to/trichoscout.log 2>&1
 """
 
 import argparse
