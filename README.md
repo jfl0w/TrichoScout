@@ -36,9 +36,9 @@ A single HTML file you can open directly in any browser. No server, no install, 
 
 1. Download `trichoScout.html`
 2. Open it in any modern browser (Chrome, Firefox, Safari, Edge)
-3. Add your keywords and click **Start Monitoring**
+3. Add your keywords, choose your check intervals and optional lookback period, then click **Start Monitoring**
 
-That's it — no installation required.
+That's all there is to it!
 
 ### Check Intervals
 
