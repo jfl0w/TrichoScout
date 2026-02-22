@@ -175,7 +175,8 @@ python "TrichoScout.py" --watch --interval 2 --lookback 72
 [2026-02-21 16:52:19] 📧 Email sent — 22 match(es).
 ```
 #### Stylized Email
-<img width="1422" height="682" alt="image" src="https://github.com/user-attachments/assets/c1de1443-9997-408d-b7e9-db9f1c6ebf0d" />
+<img width="1422" height="682" alt="image" src="https://github.com/user-attachments/assets/7d228cb9-4607-4aaa-8e74-e2f8d021dfc8" />
+
 
 ### CLI Flags
 
