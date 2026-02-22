@@ -16,7 +16,8 @@ A keyword monitor for [r/sanpedrocactusforsale](https://www.reddit.com/r/sanpedr
 ## trichoScout.html — Browser Web App
 
 ### Overview
-<img width="1908" height="934" alt="image" src="https://github.com/user-attachments/assets/e711ec2c-ddbf-486d-941d-368d5f46260e" />
+<img width="1424" height="901" alt="image" src="https://github.com/user-attachments/assets/25d52396-cd72-48e8-b9de-f50717b5af27" />
+
 A single HTML file you can open directly in any browser. No server, no install, no dependencies. Monitors Reddit's public RSS feed for new posts matching your keywords and displays them in a live feed.
 
 ### Features
