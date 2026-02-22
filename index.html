@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌵</text></svg>">
+<title>Tricho Scout — r/sanpedrocactusforsale Monitor</title>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0f0a;
+    --surface: #111811;
+    --surface2: #162016;
+    --border: #2a3d2a;
+    --accent: #5ddf6e;
+    --accent2: #a8f5b0;
+    --warn: #f5c842;
+    --danger: #f05a5a;
+    --text: #d8f0da;
+    --muted: #5a7a5c;
+    --font-head: 'Syne', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-mono);
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.6;
+  }
+
+  header {
+    padding: 28px 40px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .logo { display: flex; align-items: center; gap: 14px; }
+
+  .logo-icon {
+    width: 42px; height: 42px;
+    background: var(--accent);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+
+  .logo h1 {
+    font-family: var(--font-head);
+    font-size: 22px; font-weight: 800;
+    letter-spacing: -0.5px; color: #fff;
+  }
+
+  .logo small {
+    display: block; font-size: 11px;
+    color: var(--muted); font-family: var(--font-mono); margin-top: 2px;
+  }
+
+  .status-pill {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 100px;
+    font-size: 12px; font-weight: 500;
+    background: var(--surface2); border: 1px solid var(--border);
+    cursor: pointer; transition: all 0.2s; user-select: none;
+  }
+
+  .status-pill:hover { border-color: var(--accent); }
+
+  .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--muted); transition: background 0.3s;
+  }
+
+  .dot.active {
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
+  }
+
+  main {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    overflow: hidden;
+    height: calc(100vh - 81px);
+  }
+
+  aside {
+    border-right: 1px solid var(--border);
+    padding: 24px 20px;
+    overflow-y: auto;
+    display: flex; flex-direction: column; gap: 24px;
+  }
+
+  .section-label {
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 2px; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 10px;
+  }
+
+  .keyword-input-row { display: flex; gap: 8px; }
+
+  input[type="text"] {
+    flex: 1;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 12px;
+    color: var(--text); font-family: var(--font-mono);
+    font-size: 13px; outline: none; transition: border-color 0.2s;
+  }
+
+  input[type="text"]:focus { border-color: var(--accent); }
+  input[type="text"]::placeholder { color: var(--muted); }
+
+  button {
+    background: var(--accent); color: #0a0f0a;
+    border: none; border-radius: 8px; padding: 10px 14px;
+    font-family: var(--font-head); font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; white-space: nowrap;
+  }
+
+  button:hover { background: var(--accent2); }
+
+  .btn-ghost {
+    background: transparent; color: var(--muted);
+    border: 1px solid var(--border); font-family: var(--font-mono);
+    font-size: 11px; padding: 6px 10px;
+  }
+
+  .btn-ghost:hover { color: var(--text); border-color: var(--text); background: transparent; }
+  .btn-danger { background: transparent; color: var(--danger); border: 1px solid var(--border); }
+  .btn-danger:hover { border-color: var(--danger); background: transparent; }
+
+  .keyword-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+
+  .keyword-tag {
+    display: flex; align-items: center; gap: 6px;
+    padding: 5px 10px;
+    background: #1d2e1d; border: 1px solid var(--border);
+    border-radius: 6px; font-size: 12px;
+    animation: tagIn 0.2s ease;
+  }
+
+  @keyframes tagIn {
+    from { opacity: 0; transform: scale(0.85); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .keyword-tag span { color: var(--accent); }
+  .remove-tag { cursor: pointer; color: var(--muted); font-size: 14px; line-height: 1; transition: color 0.15s; }
+  .remove-tag:hover { color: var(--danger); }
+
+  select {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 10px 12px;
+    color: var(--text); font-family: var(--font-mono);
+    font-size: 13px; outline: none; cursor: pointer; width: 100%;
+  }
+
+  select:focus { border-color: var(--accent); }
+
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+  .stat-card {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px;
+  }
+
+  .stat-value { font-family: var(--font-head); font-size: 26px; font-weight: 800; color: #fff; }
+  .stat-label { font-size: 10px; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 1px; }
+
+  .proxy-info {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px; font-size: 11px; color: var(--muted); line-height: 1.6;
+  }
+
+  .proxy-info strong { color: var(--accent); }
+
+  .feed-panel { display: flex; flex-direction: column; overflow: hidden; }
+
+  .feed-toolbar {
+    padding: 16px 24px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; flex-shrink: 0;
+  }
+
+  .feed-tabs { display: flex; gap: 4px; }
+
+  .tab {
+    padding: 7px 16px; border-radius: 7px;
+    font-size: 12px; font-family: var(--font-mono);
+    cursor: pointer; color: var(--muted);
+    transition: all 0.2s; border: 1px solid transparent;
+  }
+
+  .tab.active { background: var(--surface2); border-color: var(--border); color: var(--text); }
+  .tab:hover:not(.active) { color: var(--text); }
+
+  .tab .badge {
+    display: inline-block; margin-left: 6px;
+    padding: 1px 6px; border-radius: 10px;
+    font-size: 10px; background: var(--accent);
+    color: #0a0f0a; font-weight: 600;
+  }
+
+  .feed-scroll {
+    overflow-y: auto; padding: 20px 24px;
+    display: flex; flex-direction: column; gap: 10px;
+    flex: 1;
+  }
+
+  .post-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 18px;
+    transition: border-color 0.2s; animation: cardIn 0.3s ease;
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .post-card:hover { border-color: #3d5a3d; }
+
+  .post-card.matched {
+    border-color: var(--accent); background: #0d1a0d;
+    box-shadow: 0 0 20px rgba(93, 223, 110, 0.08);
+  }
+
+  .post-header {
+    display: flex; align-items: flex-start;
+    justify-content: space-between; gap: 10px; margin-bottom: 8px;
+  }
+
+  .post-title { font-family: var(--font-head); font-size: 14px; font-weight: 600; color: #fff; line-height: 1.4; flex: 1; }
+  .post-title a { color: inherit; text-decoration: none; transition: color 0.15s; }
+  .post-title a:hover { color: var(--accent); }
+
+  .match-badge {
+    flex-shrink: 0; padding: 3px 10px;
+    background: var(--accent); color: #0a0f0a;
+    border-radius: 5px; font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+  }
+
+  .post-meta { font-size: 11px; color: var(--muted); display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .post-meta .author { color: var(--accent2); }
+
+  .matched-keywords { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 5px; }
+
+  .kw-highlight {
+    padding: 2px 8px;
+    background: rgba(93, 223, 110, 0.15);
+    border: 1px solid rgba(93, 223, 110, 0.3);
+    border-radius: 4px; font-size: 11px; color: var(--accent);
+  }
+
+  .empty-state {
+    display: none; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 12px; color: var(--muted); text-align: center; padding: 60px;
+    flex: 1;
+  }
+  .empty-state.visible { display: flex; }
+
+  .empty-icon { font-size: 48px; opacity: 0.5; }
+  .empty-state p { font-size: 13px; line-height: 1.6; }
+
+  #toast-container {
+    position: fixed; bottom: 24px; right: 24px;
+    display: flex; flex-direction: column; gap: 8px; z-index: 1000;
+  }
+
+  .toast {
+    padding: 12px 18px; border-radius: 10px; font-size: 13px;
+    border: 1px solid var(--border); background: var(--surface2);
+    display: flex; align-items: center; gap: 10px;
+    animation: toastIn 0.3s ease; max-width: 340px;
+  }
+
+  .toast.alert { border-color: var(--accent); background: #0d1a0d; color: var(--accent); }
+  .toast.error { border-color: var(--danger); background: #1a0d0d; color: var(--danger); }
+  .toast.warn { border-color: var(--warn); background: #1a160d; color: var(--warn); }
+
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateX(20px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .log-panel {
+    padding: 12px 24px; border-top: 1px solid var(--border);
+    font-size: 11px; color: var(--muted); flex-shrink: 0;
+    display: flex; align-items: center; gap: 8px; height: 40px; overflow: hidden;
+  }
+
+  .log-line { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .log-time { color: var(--accent); flex-shrink: 0; }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+  .email-setup-box {
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px; display: flex; flex-direction: column; gap: 10px;
+  }
+
+  .email-setup-box input[type="text"],
+  .email-setup-box input[type="email"] {
+    width: 100%; font-size: 12px; padding: 8px 10px;
+  }
+
+  .email-status {
+    font-size: 11px; padding: 6px 10px; border-radius: 6px;
+    border: 1px solid var(--border); color: var(--muted); text-align: center;
+    background: var(--surface);
+  }
+  .email-status.ok { border-color: var(--accent); color: var(--accent); background: #0d1a0d; }
+  .email-status.err { border-color: var(--danger); color: var(--danger); background: #1a0d0d; }
+
+  .setup-hint {
+    font-size: 10px; color: var(--muted); line-height: 1.6;
+  }
+  .setup-hint a { color: var(--accent); text-decoration: none; }
+  .setup-hint a:hover { text-decoration: underline; }
+
+  .collapsible-toggle {
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; user-select: none;
+  }
+  .collapsible-toggle:hover .section-label { color: var(--accent2); }
+  .chevron { font-size: 10px; color: var(--muted); transition: transform 0.2s; }
+  .chevron.open { transform: rotate(180deg); }
+  .collapsible-body { margin-top: 10px; display: none; }
+  .collapsible-body.open { display: block; }
+
+  @media (max-width: 700px) {
+    main { grid-template-columns: 1fr; grid-template-rows: auto 1fr; height: auto; }
+    aside { border-right: none; border-bottom: 1px solid var(--border); }
+    .feed-panel { min-height: 400px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🌵</div>
+    <div>
+      <h1>Tricho Scout</h1>
+      <small>r/sanpedrocactusforsale monitor</small>
+    </div>
+  </div>
+  <div style="display:flex;gap:10px;align-items:center">
+    <div class="status-pill" id="toggle-btn" onclick="toggleMonitor()">
+      <div class="dot" id="status-dot"></div>
+      <span id="status-text">Start Monitoring</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <aside>
+    <div>
+      <div class="section-label">Keywords</div>
+      <div class="keyword-input-row">
+        <input type="text" id="kw-input" placeholder="e.g. pachanoi, bridgesii…" onkeydown="if(event.key==='Enter')addKeyword()">
+        <button onclick="addKeyword()">Add</button>
+      </div>
+      <div class="keyword-list" id="keyword-list"></div>
+    </div>
+
+    <div>
+      <div class="section-label">Check Interval</div>
+      <select id="interval-select">
+        <option value="300000" selected>Every 5 minutes</option>
+        <option value="900000">Every 15 minutes</option>
+        <option value="1800000">Every 30 minutes</option>
+		<option value="3600000">Every 1 hour</option>
+		<option value="10800000">Every 3 hours</option>
+		<option value="21600000">Every 6 hours</option>
+        <option value="43200000">Every 12 hours</option>
+        <option value="86400000">Every 24 hours</option>
+      </select>
+    </div>
+
+    <div>
+      <div class="section-label">Lookback on Start</div>
+      <select id="lookback-select">
+        <option value="0" selected>No lookback (live only)</option>
+        <option value="28800">Last 8 hours</option>
+        <option value="86400">Last 24 hours</option>
+        <option value="259200">Last 3 days</option>
+        <option value="604800">Last 1 week</option>
+        <option value="2592000">Last 1 month</option>
+      </select>
+      <div style="font-size:10px;color:var(--muted);margin-top:6px;line-height:1.5">
+        Scans historical posts for keyword matches when monitoring starts. Longer windows may take a moment to fetch.
+      </div>
+    </div>
+
+    <div>
+      <div class="section-label">Filters</div>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
+        <input type="checkbox" id="filter-sold" checked style="accent-color:var(--accent);width:15px;height:15px">
+        Hide "Sold" posts
+      </label>
+    </div>
+
+    <div>
+      <div class="section-label">Sound Alerts</div>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
+        <input type="checkbox" id="sound-toggle" style="accent-color:var(--accent);width:15px;height:15px">
+        Play chime on match
+      </label>
+    </div>
+
+    <div>
+      <div class="section-label">Stats</div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-value" id="stat-checks">0</div><div class="stat-label">Checks</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-matches">0</div><div class="stat-label">Matches</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-posts">0</div><div class="stat-label">Posts seen</div></div>
+        <div class="stat-card"><div class="stat-value" id="stat-new">0</div><div class="stat-label">New posts</div></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="collapsible-toggle" onclick="toggleEmailSetup()">
+        <div class="section-label" style="margin-bottom:0">📧 Email Notifications</div>
+        <span class="chevron" id="email-chevron">▼</span>
+      </div>
+      <div class="collapsible-body" id="email-setup-body">
+        <div class="email-setup-box">
+          <div class="setup-hint">
+            Uses <a href="https://www.emailjs.com" target="_blank">EmailJS</a> (free tier = 200 emails/mo, no backend needed).<br>
+            <strong style="color:var(--text)">Setup steps:</strong><br>
+            1. Create account at <a href="https://www.emailjs.com" target="_blank">emailjs.com</a><br>
+            2. Add an <strong style="color:var(--text)">Email Service</strong> (Gmail, etc.) → copy <em>Service ID</em><br>
+            3. Create a <strong style="color:var(--text)">Template</strong> using the variables <code style="color:var(--accent)">{{matches}}</code> and <code style="color:var(--accent)">{{count}}</code> → copy <em>Template ID</em><br>
+            4. Go to Account → copy your <em>Public Key</em><br>
+            5. Paste all three below and hit Save.
+          </div>
+          <input type="text" id="ejs-public-key" placeholder="Public Key (e.g. AbCdEf1234…)">
+          <input type="text" id="ejs-service-id" placeholder="Service ID (e.g. service_xxxxxx)">
+          <input type="text" id="ejs-template-id" placeholder="Template ID (e.g. template_xxxxxx)">
+          <input type="email" id="ejs-to-email" placeholder="Your email address">
+          <button onclick="saveEmailConfig()" style="width:100%;font-size:12px">💾 Save Email Config</button>
+          <div class="email-status" id="email-status">Not configured</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-label">How it works</div>
+      <div class="proxy-info">
+        Uses Reddit's public RSS feed routed through <strong>corsproxy.io</strong> to work in the browser. Falls back to two backup proxies automatically if one fails.
+      </div>
+    </div>
+
+    <div style="margin-top:auto;display:flex;flex-direction:column;gap:8px">
+      <button class="btn-ghost" style="width:100%" onclick="checkNow()">🔄 Check Now</button>
+      <button class="btn-ghost btn-danger" style="width:100%" onclick="clearAll()">Clear Feed</button>
+    </div>
+  </aside>
+
+  <div class="feed-panel">
+    <div class="feed-toolbar">
+      <div class="feed-tabs">
+        <div class="tab active" id="tab-all" onclick="setTab('all')">All Posts <span class="badge" id="badge-all">0</span></div>
+        <div class="tab" id="tab-match" onclick="setTab('match')">Matches <span class="badge" id="badge-match" style="background:var(--warn);color:#0a0f0a">0</span></div>
+      </div>
+      <div style="font-size:11px;color:var(--muted)" id="last-check-label">Not checked yet</div>
+    </div>
+
+    <div class="feed-scroll" id="feed-scroll"></div>
+    <div class="empty-state visible" id="empty-state">
+      <div class="empty-icon">🌵</div>
+      <p>Add keywords and click <strong style="color:var(--text)">Start Monitoring</strong><br>to watch r/sanpedrocactusforsale for new listings.</p>
+    </div>
+
+    <div class="log-panel">
+      <span class="log-time" id="log-time">--:--:--</span>
+      <span class="log-line" id="log-line">Idle.</span>
+    </div>
+  </div>
+</main>
+
+<div id="toast-container"></div>
+
+<script>
+const SUBREDDIT = 'sanpedrocactusforsale';
+const RSS_URL = `https://www.reddit.com/r/${SUBREDDIT}/new.rss?limit=25`;
+
+// CORS proxies tried in order; rotates on failure
+const PROXIES = [
+  u => `https://corsproxy.io/?${encodeURIComponent(u)}`,
+  u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`,
+  u => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(u)}`,
+];
+
+let proxyIndex = 0;
+let keywords = JSON.parse(localStorage.getItem('cactus-kw') || '["pachanoi","bridgesii","peruvianus","trichocereus","san pedro","crest","variegata"]');
+let monitorInterval = null;
+let seenIds = new Set(JSON.parse(localStorage.getItem('cactus-seen') || '[]'));
+let allPosts = [];
+let matchedPosts = [];
+let currentTab = 'all';
+let stats = { checks: 0, matches: 0, posts: 0, newPosts: 0 };
+
+// ── Email Config ──────────────────────────────────────────
+
+let emailConfig = JSON.parse(localStorage.getItem('cactus-email-cfg') || 'null');
+
+function toggleEmailSetup() {
+  const body = document.getElementById('email-setup-body');
+  const chevron = document.getElementById('email-chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+}
+
+function saveEmailConfig() {
+  const publicKey  = document.getElementById('ejs-public-key').value.trim();
+  const serviceId  = document.getElementById('ejs-service-id').value.trim();
+  const templateId = document.getElementById('ejs-template-id').value.trim();
+  const toEmail    = document.getElementById('ejs-to-email').value.trim();
+
+  if (!publicKey || !serviceId || !templateId || !toEmail) {
+    setEmailStatus('⚠️ Fill in all four fields.', 'err');
+    return;
+  }
+  emailConfig = { publicKey, serviceId, templateId, toEmail };
+  localStorage.setItem('cactus-email-cfg', JSON.stringify(emailConfig));
+  emailjs.init({ publicKey });
+  setEmailStatus('✅ Configured — emails enabled', 'ok');
+  log('Email notifications configured.');
+}
+
+function setEmailStatus(msg, cls) {
+  const el = document.getElementById('email-status');
+  el.textContent = msg;
+  el.className = 'email-status' + (cls ? ' ' + cls : '');
+}
+
+function loadEmailConfig() {
+  if (!emailConfig) return;
+  document.getElementById('ejs-public-key').value  = emailConfig.publicKey;
+  document.getElementById('ejs-service-id').value  = emailConfig.serviceId;
+  document.getElementById('ejs-template-id').value = emailConfig.templateId;
+  document.getElementById('ejs-to-email').value    = emailConfig.toEmail;
+  emailjs.init({ publicKey: emailConfig.publicKey });
+  setEmailStatus('✅ Configured — emails enabled', 'ok');
+  // Auto-open the section so saved config is visible
+  document.getElementById('email-setup-body').classList.add('open');
+  document.getElementById('email-chevron').classList.add('open');
+}
+
+async function sendDigestEmail(cycleMatches) {
+  if (!emailConfig) return;
+  if (cycleMatches.length === 0) return;
+
+  const matchLines = cycleMatches.map(p => {
+    const commentStr = p.comments !== null && p.comments !== undefined ? `💬 ${p.comments} comments` : '';
+    return `• ${p.title}\n  Keywords: ${p.matchedKws.join(', ')}${commentStr ? '\n  ' + commentStr : ''}\n  Link: ${p.url}`;
+  }).join('\n\n');
+
+  try {
+    await emailjs.send(emailConfig.serviceId, emailConfig.templateId, {
+      email: emailConfig.toEmail,
+      count: cycleMatches.length,
+      matches: matchLines,
+    });
+    log(`📧 Digest email sent — ${cycleMatches.length} match(es).`);
+    showToast(`📧 Email sent: ${cycleMatches.length} match(es)`, 'alert');
+  } catch (err) {
+    log('📧 Email failed: ' + (err.text || err.message || JSON.stringify(err)));
+    showToast('📧 Email send failed — check config.', 'error');
+  }
+}
+
+renderKeywords();
+loadEmailConfig();
+
+// ── Keywords ──────────────────────────────────────────────
+
+function saveKw() { localStorage.setItem('cactus-kw', JSON.stringify(keywords)); }
+
+function addKeyword() {
+  const input = document.getElementById('kw-input');
+  const val = input.value.trim().toLowerCase();
+  if (!val || keywords.includes(val)) { input.value = ''; return; }
+  keywords.push(val);
+  saveKw();
+  renderKeywords();
+  input.value = '';
+}
+
+function removeKeyword(kw) {
+  keywords = keywords.filter(k => k !== kw);
+  saveKw();
+  renderKeywords();
+}
+
+function renderKeywords() {
+  document.getElementById('keyword-list').innerHTML = keywords.map(kw =>
+    `<div class="keyword-tag"><span>${escHtml(kw)}</span><span class="remove-tag" onclick="removeKeyword('${kw.replace(/'/g, "\\'")}')">×</span></div>`
+  ).join('');
+}
+
+// ── Monitor ───────────────────────────────────────────────
+
+function toggleMonitor() {
+  monitorInterval ? stopMonitor() : startMonitor();
+}
+
+function startMonitor() {
+  if (keywords.length === 0) { showToast('⚠️ Add at least one keyword first.', 'warn'); return; }
+  const interval = parseInt(document.getElementById('interval-select').value);
+  const lookbackSecs = parseInt(document.getElementById('lookback-select').value);
+  document.getElementById('status-dot').classList.add('active');
+  document.getElementById('status-text').textContent = 'Monitoring…';
+  log('Monitor started.');
+  if (lookbackSecs > 0) {
+    fetchHistorical(lookbackSecs).then(() => {
+      fetchPosts();
+      monitorInterval = setInterval(fetchPosts, interval);
+    });
+  } else {
+    fetchPosts();
+    monitorInterval = setInterval(fetchPosts, interval);
+  }
+}
+
+async function fetchHistorical(lookbackSecs) {
+  const cutoff = Date.now() - lookbackSecs * 1000;
+  let after = null;
+  let page = 0;
+  let totalFetched = 0;
+  let done = false;
+
+  log('🕐 Fetching historical posts…');
+  showToast('🕐 Scanning historical posts…', '');
+  const historicalMatches = [];
+
+  while (!done) {
+    const url = `https://www.reddit.com/r/${SUBREDDIT}/new.rss?limit=25` + (after ? `&after=${after}` : '');
+    let text = null;
+
+    for (let attempt = 0; attempt < PROXIES.length; attempt++) {
+      const idx = (proxyIndex + attempt) % PROXIES.length;
+      try {
+        const res = await fetch(PROXIES[idx](url), { cache: 'no-store' });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        text = await res.text();
+        proxyIndex = idx;
+        break;
+      } catch (e) {
+        if (attempt === PROXIES.length - 1) {
+          log('Historical fetch failed: ' + e.message);
+          return;
+        }
+      }
+    }
+
+    if (!text) break;
+
+    let posts;
+    try { posts = parseRSS(text); } catch(e) { break; }
+    if (posts.length === 0) break;
+
+    // Filter to posts within the lookback window
+    const inWindow = posts.filter(p => {
+      const t = p.published ? new Date(p.published).getTime() : 0;
+      return t >= cutoff;
+    });
+
+    // Process matches (silently — no sound, collect for email digest)
+    inWindow.forEach(p => {
+      if (seenIds.has(p.id)) return;
+      seenIds.add(p.id);
+      if (isSold(p)) return;
+      const pd = enrichPost(p);
+      allPosts.push(pd);
+      if (pd.matched) {
+        matchedPosts.push(pd);
+        historicalMatches.push(pd);
+        stats.matches++;
+      }
+    });
+    totalFetched += inWindow.length;
+    page++;
+
+    // Stop if oldest post in this page is before our cutoff, or no more pages
+    const oldestTime = posts[posts.length - 1].published
+      ? new Date(posts[posts.length - 1].published).getTime() : 0;
+
+    if (oldestTime < cutoff || posts.length < 25) {
+      done = true;
+    } else {
+      // Reddit RSS uses fullname t3_<id> as the `after` cursor
+      after = 't3_' + posts[posts.length - 1].id;
+      // Small delay to be polite to the API
+      await new Promise(r => setTimeout(r, 600));
+      log(`🕐 Historical scan: ${totalFetched} posts scanned (page ${page})…`);
+    }
+  }
+
+  // Sort so newest is first
+  allPosts.sort((a, b) => new Date(b.published) - new Date(a.published));
+  matchedPosts.sort((a, b) => new Date(b.published) - new Date(a.published));
+
+  localStorage.setItem('cactus-seen', JSON.stringify([...seenIds]));
+  updateStats();
+  renderFeed();
+  fetchCommentCounts(allPosts.slice(0, 25));
+  log(`✅ Historical scan complete — ${totalFetched} posts scanned, ${historicalMatches.length} match(es) found.`);
+  showToast(`✅ Lookback complete: ${historicalMatches.length} match(es) found`, 'alert');
+  if (historicalMatches.length > 0) {
+    sendDigestEmail(historicalMatches);
+  }
+}
+
+function stopMonitor() {
+  clearInterval(monitorInterval);
+  monitorInterval = null;
+  document.getElementById('status-dot').classList.remove('active');
+  document.getElementById('status-text').textContent = 'Start Monitoring';
+  log('Monitor stopped.');
+}
+
+function checkNow() { fetchPosts(); }
+
+// ── Fetch ─────────────────────────────────────────────────
+
+async function fetchPosts() {
+  log('Fetching r/' + SUBREDDIT + ' via RSS…');
+
+  let lastErr = null;
+  for (let attempt = 0; attempt < PROXIES.length; attempt++) {
+    const idx = (proxyIndex + attempt) % PROXIES.length;
+    const proxyUrl = PROXIES[idx](RSS_URL);
+    try {
+      const res = await fetch(proxyUrl, { cache: 'no-store' });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const text = await res.text();
+      const posts = parseRSS(text);
+      proxyIndex = idx; // remember working proxy
+      processPosts(posts);
+      return;
+    } catch (e) {
+      lastErr = e;
+      log(`Proxy ${idx + 1} failed (${e.message}), trying next…`);
+    }
+  }
+
+  log('All proxies failed: ' + lastErr.message);
+  showToast('❌ All proxies failed. Check your internet connection.', 'error');
+}
+
+function parseRSS(xmlText) {
+  // Strip any leading non-XML content (some proxies prepend junk)
+  const xmlStart = xmlText.indexOf('<?xml');
+  const feedStart = xmlText.indexOf('<feed');
+  const rssStart = xmlText.indexOf('<rss');
+  const start = Math.min(
+    xmlStart >= 0 ? xmlStart : Infinity,
+    feedStart >= 0 ? feedStart : Infinity,
+    rssStart >= 0 ? rssStart : Infinity
+  );
+  if (start === Infinity) throw new Error('No XML found in response');
+  const cleaned = xmlText.slice(start);
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(cleaned, 'application/xml');
+  if (doc.querySelector('parsererror')) throw new Error('Invalid XML');
+
+  // Reddit uses Atom format
+  const entries = [...doc.querySelectorAll('entry')];
+  if (entries.length === 0) {
+    // Fallback: try RSS <item>
+    const items = [...doc.querySelectorAll('item')];
+    return items.map(parseItem);
+  }
+  return entries.map(parseEntry);
+}
+
+function parseEntry(entry) {
+  const idRaw = entry.querySelector('id')?.textContent?.trim() || '';
+  const title = entry.querySelector('title')?.textContent?.trim() || '(no title)';
+  const linkEl = entry.querySelector('link[rel="alternate"]') || entry.querySelector('link');
+  const url = linkEl?.getAttribute('href') || linkEl?.textContent?.trim() || '';
+  const author = (entry.querySelector('author name')?.textContent?.trim() || 'unknown').replace(/^u\//, '');
+  const published = entry.querySelector('published')?.textContent?.trim() || '';
+  const content = entry.querySelector('content')?.textContent?.trim() || '';
+
+  // Comment count not available in RSS — fetched async after render
+  const comments = null;
+
+  // Extract short post ID
+  const m = idRaw.match(/t3_([a-z0-9]+)/) || url.match(/\/comments\/([a-z0-9]+)\//);
+  const id = m ? m[1] : idRaw.slice(-8) || Math.random().toString(36).slice(2);
+
+  return { id, title, url, author, published, content, comments };
+}
+
+function parseItem(item) {
+  const title = item.querySelector('title')?.textContent?.trim() || '(no title)';
+  const url = item.querySelector('link')?.textContent?.trim() || '';
+  const author = (item.querySelector('creator')?.textContent?.trim() || 'unknown').replace(/^u\//, '');
+  const published = item.querySelector('pubDate')?.textContent?.trim() || '';
+  const content = item.querySelector('description')?.textContent?.trim() || '';
+  const comments = null;
+  const m = url.match(/\/comments\/([a-z0-9]+)\//);
+  const id = m ? m[1] : Math.random().toString(36).slice(2);
+  return { id, title, url, author, published, content, comments };
+}
+
+function processPosts(posts) {
+  stats.checks++;
+
+  const newPosts = posts.filter(p => !seenIds.has(p.id));
+  newPosts.forEach(p => seenIds.add(p.id));
+  stats.newPosts += newPosts.length;
+
+  // Trim seenIds
+  if (seenIds.size > 600) {
+    seenIds = new Set([...seenIds].slice(-500));
+  }
+  localStorage.setItem('cactus-seen', JSON.stringify([...seenIds]));
+
+  document.getElementById('last-check-label').textContent = 'Last checked: ' + new Date().toLocaleTimeString();
+  log(`Fetched ${posts.length} posts, ${newPosts.length} new.`);
+
+  const cycleMatches = [];
+
+  newPosts.forEach(post => {
+    if (isSold(post)) return;
+    const pd = enrichPost(post);
+    allPosts.unshift(pd);
+    if (allPosts.length > 200) allPosts.pop();
+    if (pd.matched) {
+      matchedPosts.unshift(pd);
+      cycleMatches.push(pd);
+      stats.matches++;
+      showToast('🌵 Match: ' + post.title.slice(0, 70), 'alert');
+      if (document.getElementById('sound-toggle').checked) playAlert();
+      if (Notification.permission === 'granted') {
+        new Notification('🌵 Cactus Scout match!', { body: post.title });
+      }
+    }
+  });
+
+  if (cycleMatches.length > 0) {
+    sendDigestEmail(cycleMatches);
+  }
+
+  updateStats();
+  renderFeed();
+  fetchCommentCounts(allPosts.slice(0, 25));
+}
+
+function isSold(post) {
+  if (!document.getElementById('filter-sold').checked) return false;
+  const text = (post.title + ' ' + post.content).toLowerCase();
+  // Match flair text "sold" or common sold indicators
+  return /\bsold\b/.test(text);
+}
+
+function enrichPost(post) {
+  const text = (post.title + ' ' + post.content).toLowerCase();
+  const matchedKws = keywords.filter(kw => text.includes(kw.toLowerCase()));
+  return { ...post, matched: matchedKws.length > 0, matchedKws };
+}
+
+// ── Comment counts (fetched async from Reddit JSON API) ───
+
+async function fetchCommentCounts(posts) {
+  // Only fetch for posts that don't have a count yet and have an id
+  const needed = posts.filter(p => p.comments === null && p.id);
+  if (needed.length === 0) return;
+
+  // Reddit JSON API supports fetching multiple posts via /by_id/t3_id1,t3_id2...
+  const fullnames = needed.map(p => 't3_' + p.id).join(',');
+  const url = `https://www.reddit.com/by_id/${fullnames}.json`;
+
+  try {
+    const proxyUrl = PROXIES[proxyIndex](url);
+    const res = await fetch(proxyUrl, { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    const children = data?.data?.children || [];
+    children.forEach(child => {
+      const id = child?.data?.id;
+      const count = child?.data?.num_comments;
+      if (id === undefined || count === undefined) return;
+      // Update in allPosts and matchedPosts
+      [allPosts, matchedPosts].forEach(list => {
+        const post = list.find(p => p.id === id);
+        if (post) post.comments = count;
+      });
+      // Update DOM directly
+      const el = document.querySelector(`[data-post-id="${id}"] .comment-count`);
+      if (el) el.textContent = '💬 ' + count;
+    });
+  } catch(e) {
+    // Silently fail — comment counts are non-critical
+  }
+}
+
+
+
+function renderFeed() {
+  const scroll = document.getElementById('feed-scroll');
+  const empty = document.getElementById('empty-state');
+  const posts = currentTab === 'all' ? allPosts : matchedPosts;
+
+  document.getElementById('badge-all').textContent = allPosts.length;
+  document.getElementById('badge-match').textContent = matchedPosts.length;
+
+  if (posts.length === 0) {
+    empty.classList.add('visible');
+    scroll.style.display = 'none';
+    return;
+  }
+  empty.classList.remove('visible');
+  scroll.style.display = '';
+
+  scroll.innerHTML = posts.map(post => {
+    const time = post.published ? new Date(post.published).toLocaleString() : '';
+    const matchBadge = post.matched ? `<span class="match-badge">MATCH</span>` : '';
+    const kwBadges = post.matched
+      ? `<div class="matched-keywords">${post.matchedKws.map(k => `<span class="kw-highlight">${escHtml(k)}</span>`).join('')}</div>`
+      : '';
+    const commentCount = post.comments !== null && post.comments !== undefined
+      ? `<span class="comment-count">💬 ${post.comments}</span>`
+      : `<span class="comment-count"></span>`;
+    return `
+      <div class="post-card ${post.matched ? 'matched' : ''}" data-post-id="${escHtml(post.id)}">
+        <div class="post-header">
+          <div class="post-title"><a href="${escHtml(post.url)}" target="_blank" rel="noopener">${escHtml(post.title)}</a></div>
+          ${matchBadge}
+        </div>
+        <div class="post-meta">
+          <span class="author">${escHtml(post.author)}</span>
+          ${time ? `<span>${time}</span>` : ''}
+          ${commentCount}
+        </div>
+        ${kwBadges}
+      </div>`;
+  }).join('');
+}
+
+function setTab(tab) {
+  currentTab = tab;
+  document.getElementById('tab-all').classList.toggle('active', tab === 'all');
+  document.getElementById('tab-match').classList.toggle('active', tab === 'match');
+  renderFeed();
+}
+
+function updateStats() {
+  document.getElementById('stat-checks').textContent = stats.checks;
+  document.getElementById('stat-matches').textContent = stats.matches;
+  document.getElementById('stat-posts').textContent = allPosts.length;
+  document.getElementById('stat-new').textContent = stats.newPosts;
+}
+
+function clearAll() {
+  allPosts = []; matchedPosts = [];
+  seenIds.clear();
+  localStorage.removeItem('cactus-seen');
+  stats = { checks: 0, matches: 0, posts: 0, newPosts: 0 };
+  updateStats(); renderFeed();
+  log('Feed cleared.');
+}
+
+// ── Utilities ─────────────────────────────────────────────
+
+function log(msg) {
+  document.getElementById('log-time').textContent = new Date().toLocaleTimeString();
+  document.getElementById('log-line').textContent = msg;
+}
+
+function showToast(msg, type) {
+  const container = document.getElementById('toast-container');
+  const t = document.createElement('div');
+  t.className = 'toast' + (type ? ' ' + type : '');
+  t.textContent = msg;
+  container.appendChild(t);
+  setTimeout(() => t.remove(), 6000);
+}
+
+let _audioCtx = null;
+function getAudioCtx() {
+  if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (_audioCtx.state === 'suspended') _audioCtx.resume();
+  return _audioCtx;
+}
+
+function playAlert() {
+  try {
+    const ctx = getAudioCtx();
+    [440, 554, 659].forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.frequency.value = freq; osc.type = 'sine';
+      const t = ctx.currentTime + i * 0.18;
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.35, t + 0.05);
+      gain.gain.linearRampToValueAtTime(0, t + 0.25);
+      osc.start(t); osc.stop(t + 0.3);
+    });
+  } catch(e) { console.warn('playAlert failed:', e); }
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Request browser notification permission
+if ('Notification' in window && Notification.permission === 'default') {
+  Notification.requestPermission();
+}
+
+// Warm up AudioContext on first interaction so chime works when match fires
+document.addEventListener('click', () => { try { getAudioCtx(); } catch(e){} }, { once: true });
+</script>
+</body>
+</html>
