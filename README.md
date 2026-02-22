@@ -8,8 +8,8 @@ A keyword monitor for [r/sanpedrocactusforsale](https://www.reddit.com/r/sanpedr
 
 | File | Description |
 |------|-------------|
-| `trichoScout.html` | Self-contained browser app — open locally, no install needed |
-| `TrichoScout.py` | Python script for headless/server use, runs while laptop is closed |
+| `trichoScout.html` | Self-contained browser app in a single HTML file. Run locally, no install needed |
+| `TrichoScout.py` | Python script for headless/server use |
 
 ---
 
@@ -26,7 +26,7 @@ A single HTML file you can open directly in any browser. No server, no install, 
 - **Live feed** — all posts and matched posts in separate tabs with badge counts
 - **Lookback on start** — optionally scan historical posts (8h, 24h, 3 days, 1 week, 1 month) when monitoring begins
 - **Comment counts** — fetched live from Reddit's JSON API and displayed per post
-- **Hide sold posts** — filters out posts containing the word "sold"
+- **Hide sold posts** — filters out posts containing the "sold" falir
 - **Email digests** — sends a styled HTML email via [EmailJS](https://www.emailjs.com) when matches are found (free tier: 200 emails/month)
 - **Sound alerts** — optional chime on match
 - **Browser notifications** — native desktop notifications for matches
