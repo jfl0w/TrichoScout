@@ -28,7 +28,7 @@ A single HTML file you can open directly in any browser. No server, no install, 
 - **Comment counts** — fetched live from Reddit's JSON API and displayed per post
 - **Hide sold posts** — filters out posts containing the "sold" falir
 - **Email digests** — sends a styled HTML email via [EmailJS](https://www.emailjs.com) when matches are found (free tier: 200 emails/month)
-- **Sound alerts** — optional chime on match
+- **Sound alerts** — optional chime on match (work in progress, doesn't seem to play well currently)
 - **Browser notifications** — native desktop notifications for matches
 - **Persistent state** — keywords and seen post IDs saved to `localStorage` across sessions
 
